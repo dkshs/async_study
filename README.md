@@ -14,7 +14,7 @@ The proposal is to create a system that helps with your studies.
 
 ## How to execute the project
 
-To run the project you need to have [Python](https://www.python.org/) and [Git](https://git-scm.com) installed on your machine or just use [Docker](#9-running-with-docker) together with [Git](https://git-scm.com).
+To run the project you need to have [Python](https://www.python.org/), [Node](https://nodejs.org/) (To run TailwindCSS) and [Git](https://git-scm.com) installed on your machine or just use [Docker](#9-running-with-docker) together with [Git](https://git-scm.com).
 
 ### 1. Clone this repository
 
@@ -32,10 +32,18 @@ cd async_study
 
 Start a virtual environment and activate it. If you don't know how, this might help: <https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments>.
 
-### 4. Install development dependencies
+### 4. Install dependencies
+
+Python dependencies:
 
 ```bash
 pip install -r requirements/local.txt
+```
+
+Node dependencies:
+
+```bash
+npm install
 ```
 
 ### 5. Configure environment variables
@@ -68,8 +76,16 @@ python manage.py createsuperuser
 
 ### 8. Running application in development mode
 
+Django application:
+
 ```bash
 python manage.py runserver
+```
+
+Tailwind css:
+
+```bash
+npm run dev
 ```
 
 - The application will start locally - go to: <http://127.0.0.1:8000/>
@@ -80,7 +96,7 @@ python manage.py runserver
 
 ### 9. Running with Docker
 
-Having the [source code](#1-clone-this-repository) with the [variables defined](#5-configure-environment-variables), being in the [right folder](#2-access-the-project-folder), with [Docker](https://www.docker.com/) installed, let's up the container:
+Having the [source code](#1-clone-this-repository) with the [variables defined](#5-configure-environment-variables), with [Docker](https://www.docker.com/) installed, let's up the container:
 
 ```bash
 docker compose up -d

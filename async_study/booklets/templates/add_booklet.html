@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Add Booklet{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col mt-12 max-w-7xl mx-auto px-2">
+    <div class="grid grid-rows-2 lg:grid-cols-2 mb-6">
+      <div class="w-full flex flex-col items-center lg:items-start">
+        <form
+          method="post"
+          action="{% url "add_booklet" %}"
+          enctype="multipart/form-data"
+          class="px-4 sm:px-8 py-7 bg-card w-full max-w-[500px] rounded-md border"
+        >
+          {% csrf_token %}
+          <h2 class="text-2xl font-bold mb-6">Add booklet</h2>
+          <div class="flex flex-col gap-2 mb-4">
+            <label for="title" class="label">Title:</label>
+            <input type="text" id="title" name="title" class="input" required />
+          </div>
+          <div class="flex flex-col gap-2 mb-6 w-1/2">
+            <label for="file" class="label">File:</label>
+            <input type="file" id="file" name="file" class="input button-outline" required />
+          </div>
+          <button type="submit" class="button-primary">Add</button>
+        </form>
+      </div>
+      <div class="w-full flex flex-col lg:mt-0 pr-2 max-w-[500px] mx-auto lg:max-w-none">
+        <div class="w-full overflow-auto pb-2 max-h-80 overscroll-contain">
+          <table class="w-full caption-bottom text-sm">
+            <caption class="mt-4 text-sm text-muted-foreground">
+              A list of your booklets.
+            </caption>
+            <thead class="[&_tr]:border-b">
+              <tr class="border-b duration-200 hover:bg-muted/50">
+                <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Title</th>
+                <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
+              </tr>
+            </thead>
+            <tbody class="[&_tr:last-child]:border-0">
+              {% for booklet in booklets %}
+                <tr class="border-b duration-200 hover:bg-muted/50 focus-within:bg-muted/50">
+                  <td class="py-2 px-4 align-middle font-medium">
+                    <a href="{% url "booklet" booklet.id %}" class="link">{{ booklet.title }}</a>
+                  </td>
+                  <td class="py-2 px-4 align-middle font-medium">
+                    <a href="{% url "booklet" booklet.id %}" class="button-outline py-1 p-2">Open</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-6 pt-6 border-t w-full">
+          <p class="text-lg font-medium">Total views: {{ total_views }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

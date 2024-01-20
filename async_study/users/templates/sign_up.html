@@ -1,0 +1,27 @@
+{% extends "users/base.html" %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block form %}
+  <form method="post" action="{% url "sign_up" %}">
+    {% csrf_token %}
+    <h2 class="text-2xl font-bold mb-6">Sign Up</h2>
+    <div class="flex flex-col gap-2 mb-6">
+      <label for="username" class="label">Username:</label>
+      <input type="text" id="username" name="username" class="input" required />
+    </div>
+    <div class="flex flex-col gap-2 mb-6">
+      <label for="password" class="label">Password:</label>
+      <input type="password" id="password" name="password" class="input" required />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="confirm_password" class="label">Confirm password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" class="input" required />
+    </div>
+    <button type="submit" class="mt-6 button-primary">Sign Up</button>
+    <p class="mt-4 text-sm">
+      Already have an account?
+      <a href="{% url "sign_in" %}" class="link-primary">Sign In</a>.
+    </p>
+  </form>
+{% endblock form %}

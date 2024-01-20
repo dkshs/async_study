@@ -1,0 +1,64 @@
+<div
+  id="flashcard-{{ f.flashcard.id }}"
+  class="max-w-96 {% if f.is_answered %}opacity-50{% endif %} relative flex flex-col py-4 px-8 w-full bg-card border border-border rounded-md shadow-lg shadow-black/30"
+>
+  <div
+    class="w-4 {% if f.flashcard.difficulty == 'E' %}bg-green-600{% elif f.flashcard.difficulty == 'M' %}bg-yellow-600{% else %}bg-red-600{% endif %} h-full rounded-l-md absolute inset-0"
+  ></div>
+  {% if not challenge_flashcard %}
+    <a
+      href="{% url "remove_flashcard" f.flashcard.id %}"
+      class="button p-1 size-fit bg-red-600 rounded-full hover:opacity-80 absolute right-2 top-2"
+      title="Remove flashcard"
+    >
+      <i class="ph-bold ph-x"></i>
+    </a>
+  {% endif %}
+  <div class="size-full flex flex-col gap-4">
+    <span class="py-1.5 px-3 bg-secondary/60 rounded-md text-sm w-fit">{{ f.flashcard.category }}</span>
+    <h3 class="ml-1 text-lg">{{ f.flashcard.question }}</h3>
+  </div>
+  {% if challenge_flashcard %}
+    {% if not f.is_answered %}
+      <div class="flex gap-2 mt-3">
+        <a
+          href="{% url "reply_flashcard" f.id %}?is_correct=False&challenge_id={{ challenge.id }}"
+          class="button p-0"
+        >
+          <i class="ph-bold ph-x p-1 bg-red-600 rounded-md"></i>
+        </a>
+        <a
+          href="{% url "reply_flashcard" f.id %}?is_correct=True&challenge_id={{ challenge.id }}"
+          class="button p-0"
+        >
+          <i class="ph-bold ph-check p-1 bg-green-600 rounded-md"></i>
+        </a>
+      </div>
+    {% else %}
+      <div class="flex gap-2 items-center mt-2">
+        {% if f.is_correct %}
+          <span class="py-1 px-2 rounded-md bg-green-600 w-fit">Correct</span>
+          {% else %}
+          <span class="py-1 px-2 rounded-md bg-red-600 w-fit">Incorrect</span>
+        {% endif %}
+        <a
+          href="{% url "reply_flashcard" f.id %}?is_answered=False&is_correct=False&challenge_id={{ challenge.id }}"
+          class="button-outline py-1 px-2"
+        >
+          Reset
+        </a>
+      </div>
+    {% endif %}
+  {% endif %}
+  <div id="answer-{{ f.flashcard.id }}" class="mt-2 ml-1 hidden">
+    <p class="font-bold">{{ f.flashcard.answer }}</p>
+  </div>
+  <button
+    type="button"
+    onclick="showAnswer('{{ f.flashcard.id }}')"
+    id="answer-btn-{{ f.flashcard.id }}"
+    class="button-outline w-fit px-2 py-1 mt-4"
+  >
+    Show answer
+  </button>
+</div>

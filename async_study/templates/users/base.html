@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+  <div class="flex justify-between size-full relative px-4">
+    <div
+      class="size-full absolute inset-0 -z-[1] bg-center bg-no-repeat bg-cover"
+      style="background-image: url({% static "users/img/bg1.png" %});"
+    ></div>
+    <div class="grid grid-rows-3 lg:grid-cols-2 size-full my-12 lg:my-20">
+      <div class="w-full flex flex-col items-center mb-20 lg:mb-0">
+        <div class="flex items-center gap-3 border-b border-border mb-14 lg:mb-20">
+          <img
+            src="{% static "images/favicons/logo.png" %}"
+            alt="Async Study Logo"
+            height="150px"
+            width="150px"
+            class="size-[150px]"
+          />
+          <h1 class="text-4xl">Async.Study</h1>
+        </div>
+        <p class="text-xl text-center max-w-64 break-words">
+          Your online platform to help you with your studies
+        </p>
+      </div>
+      <div class="w-full row-span-2 flex flex-col items-center">
+        <div class="px-8 py-7 bg-card/60 w-[500px] lg:self-start rounded-md shadow-lg shadow-black/60">
+          <div class="flex gap-2 mb-2">
+            <span class="p-1 rounded-full bg-blue-600"></span>
+            <span class="p-1 rounded-full bg-green-600"></span>
+            <span class="p-1 rounded-full bg-orange-600"></span>
+          </div>
+          {% block form %}{% endblock form %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

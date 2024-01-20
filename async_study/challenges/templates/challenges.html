@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Challenges{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col justify-center max-w-3xl mx-auto mt-16">
+    <form
+      method="get"
+      action="{% url "challenges" %}"
+      class="flex items-center gap-4 flex-col sm:flex-row px-2"
+    >
+      <div class="flex flex-col gap-2 w-full">
+        <label for="category" class="label">Category:</label>
+        <select id="category" name="category" class="input">
+          <option value="">---------</option>
+          {% for category in categories %}
+            <option
+            {% if f.category == category.id|slugify %}selected{% endif %}
+              value="{{ category.id }}"
+            >
+              {{ category.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <label for="difficulty" class="label">Difficulty:</label>
+        <select id="difficulty" name="difficulty" class="input">
+          <option value="">---------</option>
+          {% for difficulty in difficulties %}
+            <option
+            {% if f.difficulty.value == difficulty.value %}selected{% endif %}
+              value="{{ difficulty.value }}"
+            >
+              {{ difficulty.label }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <label for="difficulty" class="label">Status:</label>
+        <select id="status" name="status" class="input">
+          <option value="">---------</option>
+          <option value="True" {% if f.status %}selected{% endif %}>Answered</option>
+          <option value="False" {% if f.status == False %}selected{% endif %}>Not answered</option>
+        </select>
+      </div>
+      <button type="submit" class="button-primary self-end">Filter</button>
+    </form>
+    <a href="{% url "start_challenge" %}" class="link-primary mt-6 mb-2 w-fit ml-2 md:ml-0">
+      Start a challenge
+    </a>
+    <div class="py-1 px-2 md:p-4 border md:rounded flex flex-col gap-1">
+      <div class="w-full overflow-auto pb-2 max-h-[500px] overscroll-contain">
+        <table class="w-full caption-top text-sm">
+          <caption class="mb-4 text-sm text-muted-foreground">
+            A list of your challenges.
+          </caption>
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b duration-200 hover:bg-muted/50">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Challenge</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Title</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Difficulty</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            {% for challenge in challenges %}
+              <tr class="border-b duration-200 hover:bg-muted/50 focus-within:bg-muted/50">
+                <td class="p-4 align-middle font-medium">
+                  <a href="{% url "challenge" challenge.id %}" class="link">#{{ challenge.id }}</a>
+                </td>
+                <td class="p-4 align-middle font-medium">
+                  <a href="{% url "challenge" challenge.id %}" class="link">{{ challenge.title }}</a>
+                  </td>
+                <td class="p-4 align-middle font-medium">
+                  <span class="px-2 py-0.5 rounded-lg {% if challenge.difficulty == 'E' %}bg-green-600{% elif challenge.difficulty == 'M' %}bg-yellow-600{% else %}bg-red-600{% endif %}">
+                    {{ challenge.get_difficulty_display }}
+                  </span>
+                </td>
+                <td class="p-4 align-middle font-medium truncate">
+                  <span class="px-2 py-0.5 rounded-lg {% if challenge.is_answered %}bg-green-600{% else %}bg-blue-600{% endif %}">
+                    {% if challenge.is_answered %}Answered{% else %}Not answered{% endif %}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

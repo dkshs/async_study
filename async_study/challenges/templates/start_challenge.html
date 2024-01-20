@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Start Challenge{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col justify-center items-center mt-16 px-4">
+    <h1 class="text-5xl font-bold text-center">Start Challenge</h1>
+    <h3 class="text-2xl font-medium mt-4 text-center">
+      Create a challenge and choose the category and difficulty
+    </h3>
+    <form
+      method="post"
+      action="{% url "start_challenge" %}"
+      class="flex flex-col gap-2 sm:gap-4 mt-10 w-full max-w-[600px]"
+    >
+      {% csrf_token %}
+      <div class="flex flex-col gap-2 w-full">
+        <label for="title" class="label text-lg">Challenge title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="input"
+          placeholder="My challenge..."
+          required
+        />
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <label for="questions_qt" class="label text-lg">Questions quantity:</label>
+        <input type="number" id="questions_qt" name="questions_qt" class="input" value="1" required />
+      </div>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col gap-2 w-full">
+          <label for="categories" class="label text-lg">Categories:</label>
+          <select id="categories" name="categories" class="input h-28" required multiple>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label for="difficulty" class="label text-lg">Difficulty:</label>
+          <select id="difficulty" name="difficulty" class="input" required>
+            {% for difficulty in difficulties %}
+              <option value="{{ difficulty.value }}">{{ difficulty.label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="button-primary mt-10 px-8 text-lg uppercase">Start</button>
+    </form>
+  </div>
+{% endblock content %}

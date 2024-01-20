@@ -1,0 +1,9 @@
+-r base.txt
+
+Werkzeug[watchdog]==3.0.1  # https://github.com/pallets/werkzeug
+
+# Django
+# ------------------------------------------------------------------------------
+django-debug-toolbar==4.2.0  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==3.2.3  # https://github.com/django-extensions/django-extensions
+django-browser-reload==1.12.1  # https://github.com/adamchainz/django-browser-reload

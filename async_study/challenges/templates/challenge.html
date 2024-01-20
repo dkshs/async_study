@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static filters %}
+
+{% block title %}{{ challenge.title }} {% endblock title %}
+
+{% block content %}
+  <div class="grid grid-rows-2 lg:grid-cols-2 size-full mt-10 max-w-7xl mx-auto px-2">
+    <div class="w-full flex flex-col items-center lg:items-start">
+      <h1 class="font-bold text-3xl">{{ challenge.title }}</h1>
+      <div class="flex gap-1 mt-3">
+        {% for category in challenge.categories.all %}
+          <span class="py-1 px-3 bg-secondary/30 rounded-md text-sm">{{ category }}</span>
+        {% endfor %}
+        <span
+          class="py-1 px-3 rounded-md text-sm {% if challenge.difficulty == 'E' %}bg-green-600/60{% elif challenge.difficulty == 'M' %}bg-yellow-600/60{% else %}bg-red-600/60{% endif %}"
+        >
+          {{ challenge.get_difficulty_display }}
+        </span>
+      </div>
+      <div class="flex flex-col gap-4 w-full mt-8 items-center lg:items-stretch">
+        {% if not flashcards %}
+          <p class="text-lg">No flashcard found</p>
+        {% else %}
+          {% for f in flashcards %}
+            {% include "partials/flashcard.html" with f=f challenge_flashcard=True %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="w-full flex flex-col items-center lg:items-start mt-20 lg:mt-0">
+      <h2 class="font-bold text-2xl">Result</h2>
+      <div class="flex flex-col gap-2 mt-6">
+        <p class="text-lg">Correct: {{ correct }}</p>
+        <p class="text-lg">Incorrect: {{ incorrect }}</p>
+        <p class="text-lg">Not answered: {{ not_answered_flashcards }}</p>
+      </div>
+      <div class="flex gap-2 justify-center flex-wrap my-10">
+        <a href="{% url "report" challenge.id %}" class="button-primary">Detailed report</a>
+        <a
+          href="{% url "remove_challenge" challenge.id %}"
+          class="button-primary"
+        >
+          Remove Challenge
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static "flashcards/js/flashcards.js" %}"></script>
+{% endblock js %}

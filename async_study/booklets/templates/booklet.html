@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ booklet.title }}{% endblock title %}
+
+{% block content %}
+  <div class="grid grid-rows-2 lg:grid-cols-2 mb-6 mt-12 max-w-7xl mx-auto px-2">
+    <div class="w-full flex flex-col items-center">
+      <a href="{{ booklet.file.url }}">
+        <div id="booklet_pdf"></div>
+      </a>
+    </div>
+    <div class="w-full flex flex-col items-center mt-6 lg:items-start lg:mt-0">
+      <p class="text-lg font-medium">Unique views: {{ unique_views }}</p>
+      <p class="text-lg font-medium">Total views: {{ total_views }}</p>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+<script src="{% static "booklets/js/pdf.js" %}"></script>
+<script>createPDFContainer("{{ booklet.file.url }}")</script>
+{% endblock js %}

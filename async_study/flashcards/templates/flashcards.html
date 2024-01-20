@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static filters %}
+
+{% block title %}Flashcard{% endblock title %}
+
+{% block content %}
+  <div class="grid grid-rows-3 lg:grid-cols-2 size-full gap-4 my-12 lg:my-20 sm:px-4">
+    <div class="w-full flex flex-col items-center mb-20 lg:mb-0">
+      <form
+        method="post"
+        action="{% url "flashcards" %}"
+        class="px-4 sm:px-8 py-7 bg-card w-full max-w-[500px] rounded-md border border-border"
+      >
+        {% csrf_token %}
+        <h2 class="text-2xl font-bold mb-6">Create flahscard</h2>
+        <div class="flex flex-col gap-2 mb-6">
+          <label for="question" class="label">Question:</label>
+          <input type="text" id="question" name="question" class="input" required />
+        </div>
+        <div class="flex flex-col gap-2 mb-6">
+          <label for="response" class="label">Response:</label>
+          <textarea type="text" id="response" name="response" class="textarea" required></textarea>
+        </div>
+        <div class="flex flex-col md:flex-row gap-4 mb-6">
+          <div class="flex flex-col gap-2 w-full">
+            <label for="category" class="label">Category:</label>
+            <select id="category" name="category" class="input" required>
+              {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="flex flex-col gap-2 w-full">
+            <label for="difficulty" class="label">Difficulty:</label>
+            <select id="difficulty" name="difficulty" class="input" required>
+              {% for difficulty in difficulties %}
+                <option value="{{ difficulty.value }}">{{ difficulty.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="button-primary">Create</button>
+      </form>
+    </div>
+    <div class="w-full row-span-2 flex flex-col items-center lg:items-start">
+      <form
+        method="get"
+        action="{% url "flashcards" %}"
+        class="flex gap-4 mb-6 items-center w-full max-w-[500px] flex-col px-2 sm:flex-row sm:px-0"
+      >
+        <div class="flex flex-col gap-2 w-full">
+          <label for="filter_category" class="label">Category:</label>
+          <select id="filter_category" name="filter_category" class="input">
+            <option value="">---------</option>
+            {% for category in categories %}
+              <option
+                {% if filter_category == category.id|slugify %}selected{% endif %}
+                value="{{ category.id }}"
+              >
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="flex flex-col gap-2 w-full">
+          <label for="filter_difficulty" class="label">Difficulty:</label>
+          <select id="filter_difficulty" name="filter_difficulty" class="input">
+            <option value="">---------</option>
+            {% for difficulty in difficulties %}
+              <option
+                {% if filter_difficulty == difficulty.value %}selected{% endif %}
+                value="{{ difficulty.value }}"
+              >
+                {{ difficulty.label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="button-primary self-end w-full sm:w-auto">Filter</button>
+      </form>
+      <div class="flex flex-col gap-4 w-full mt-8 items-center lg:items-stretch px-2">
+        {% if not flashcards %}
+          <p class="text-lg">No flashcard found</p>
+        {% else %}
+          {% for flashcard in flashcards %}
+            {% include "partials/flashcard.html" with f=flashcard|return_flashcard_object %}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static "flashcards/js/flashcards.js" %}"></script>
+{% endblock js %}

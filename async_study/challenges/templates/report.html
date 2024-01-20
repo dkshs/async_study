@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static filters %}
+
+{% block title %}{{ challenge.title }} - Report{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col mt-10 max-w-7xl mx-auto px-2 relative">
+    <div class="w-full flex flex-col items-center lg:items-start border-b pb-8">
+      <a href="{% url "challenge" challenge.id %}" class="link">
+        <h1 class="font-bold text-3xl">{{ challenge.title }}</h1>
+      </a>
+      <div class="flex flex-wrap justify-center gap-1 mt-3">
+        {% for category in challenge.categories.all %}
+          <span class="py-1 px-3 bg-secondary/30 rounded-md text-sm">{{ category }}</span>
+        {% endfor %}
+        <span
+          class="py-1 px-3 rounded-md text-sm {% if challenge.difficulty == 'E' %}bg-green-600/60{% elif challenge.difficulty == 'M' %}bg-yellow-600/60{% else %}bg-red-600/60{% endif %}"
+        >
+          {{ challenge.get_difficulty_display }}
+        </span>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row gap-8 md:gap-0 mt-10 pb-10 border-b">
+      <div class="flex flex-col gap-5 w-full">
+        <h2 class="text-2xl font-bold">Total hits</h2>
+        <canvas id="graph1"></canvas>
+      </div>
+      <div class="flex flex-col gap-5 w-full">
+        <h2 class="text-2xl font-bold">Hits by area of knowledge</h2>
+        <canvas id="graph2"></canvas>
+      </div>
+    </div>
+    <div class="flex flex-col gap-6 my-10">
+      <div class="flex flex-col gap-3 w-full">
+        <h2 class="text-2xl font-bold">Best categories</h2>
+        <div class="flex gap-6">
+          {% for category in best_categories %}
+            <div class="bg-secondary/40 rounded-md flex flex-col">
+              <div class="w-full h-10 bg-secondary py-2 px-3 rounded-t-md">
+                <span class="text-lg">{{ category.name }}</span>
+              </div>
+              <div class="flex flex-col p-3">
+                <p class="text-lg">Correct: {{ category.correct }}</p>
+                <p class="text-lg">Incorrect: {{ category.incorrect }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex flex-col gap-3 w-full">
+        <h2 class="text-2xl font-bold">Worst categories</h2>
+        <div class="flex gap-6">
+          {% for category in worst_categories %}
+            <div class="bg-secondary/40 rounded-md flex flex-col">
+              <div class="w-full h-10 bg-secondary py-2 px-3 rounded-t-md">
+                <span class="text-lg">{{ category.name }}</span>
+              </div>
+              <div class="flex flex-col p-3">
+                <p class="text-lg">Correct: {{ category.correct }}</p>
+                <p class="text-lg">Incorrect: {{ category.incorrect }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static "challenges/js/graph.js" %}"></script>
+<script>createGraphs({{ data }}, {{ data2 }}, {{ category_names|safe }})</script>
+{% endblock js %}

@@ -19,13 +19,13 @@ To run the project you need to have [Python](https://www.python.org/) and [Git](
 ### 1. Clone this repository
 
 ```bash
-git clone https://github.com/dkshs/pythonando-immersion.git
+git clone https://github.com/dkshs/async_study.git
 ```
 
 ### 2. Access the project folder
 
 ```bash
-cd pythonando-immersion/async_study
+cd async_study
 ```
 
 ### 3. Virtual environment
